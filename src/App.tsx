@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import { fetchPhotos } from './api';
 
-function App() {
-  const [count, setCount] = useState(0)
+import './App.css';
+import { Photo } from './types/Photo';
+import { FavoritesProvider } from './FavoritesContext/FavoritesContext';
+import { Popup } from './components/Popup';
 
+export const App = () => {
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);  
+
+  useEffect(() => {
+      setIsLoading(true);
+
+      fetchPhotos()
+        .then(data => setPhotos(data))
+        .catch(err => {
+          console.error(err);
+          setError('Failed to load photos. Please try again later.')
+        })
+        .finally(() => setIsLoading(false));
+  }, []);
+  
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className='App'>
+      {isLoading && <p>Loading...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <FavoritesProvider>
+        <Popup photos={photos} />
+      </FavoritesProvider>
+    </div>
+  );
 }
-
-export default App
