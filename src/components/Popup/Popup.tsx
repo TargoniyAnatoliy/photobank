@@ -1,27 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { Photo } from "../../types/Photo";
-import { useFavorites } from "../../FavoritesContext";
-import { Columns } from "../Columns";
-
+import { groupPhotosByLetter } from "../../utils";
+import { PhotoCard } from "../PhotoCard";
 
 type Props = {
     photos: Photo[];
 }
 
 export const Popup: React.FC<Props> = ({ photos }) => {
-    const [isFavorites, setIsFavorites] = useState(false);
-    const { favorites } = useFavorites();
 
-    const filteredPhotos = isFavorites
-        ? photos.filter((photo) => favorites.includes(photo.id))
-        : photos;
+    const groupedPhotos = groupPhotosByLetter(photos);
 
     return (
-        <div className="popup">
-            <button onClick={() => setIsFavorites(!isFavorites)}>
-                {isFavorites ? 'Show All' : 'Show Favorites'}
-            </button>
-            <Columns photos={filteredPhotos} />
+        <div className="popup">            
+            <div className="columns">
+                {groupedPhotos.map(([letter, photos]) => (
+                    <div key={letter} className="column">
+                        <h3>{letter}</h3>
+                        {photos.map((photo) => (
+                            <PhotoCard key={photo.id} photo={photo} />
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
