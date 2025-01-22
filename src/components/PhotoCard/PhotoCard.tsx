@@ -1,5 +1,8 @@
+import classNames from "classnames";
 import { useFavorites } from "../../FavoritesContext";
 import { Photo } from "../../types/Photo";
+import styles from './PhotoCard.module.scss';
+import { FaStar } from "react-icons/fa";
 
 interface Props {
     photo: Photo;
@@ -9,15 +12,22 @@ export const PhotoCard: React.FC<Props> = ({ photo }) => {
     const { toggleFavorite, isFavorite } = useFavorites();
 
     return (
-        <div className="photo-card">
-            <img src={photo.thumbnail} alt={photo.author} />
-            <p>{photo.author}</p>
-            <span
-                className={`star ${isFavorite(photo.id) ? 'favorite' : ''}`}
-                onClick={() => toggleFavorite(photo.id)}
-            >
-                ★
+        <div className={styles.photoCard}>
+            <span className={styles.imageGroup}>
+                <img src={photo.thumbnail} alt={photo.author} />
+                <p>
+                    {photo.author
+                        .split(' ')
+                        .slice(0, 1)
+                        .join('')}
+                </p> 
             </span>
+            <FaStar
+                className={classNames(styles.star, {
+                    [styles.favorite]: isFavorite(photo.id),
+                })}
+                onClick={() => toggleFavorite(photo.id)}
+            />
         </div>
     );
 };

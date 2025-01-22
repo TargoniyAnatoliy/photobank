@@ -1,0 +1,39 @@
+.photoCard {
+  background-color: rgba(247, 248, 249, 1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  max-width: 260px;
+  height: 40px;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 4px 12px 4px 4px;
+
+  .imageGroup {
+    display: flex;
+    align-items: center;
+    img {
+      display: block;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      margin-right: 8px;
+    } 
+  }
+
+  .star {
+    cursor: pointer;
+    color: rgb(222, 222, 229);
+    font-size: 14px;
+    transition: color 0.3s ease;
+    justify-self: flex-end;
+  }
+
+  .favorite {
+    color: rgb(62, 94, 242);
+    ;
+  }
+}
+  
