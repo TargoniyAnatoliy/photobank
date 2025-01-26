@@ -5,21 +5,29 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 8px;
-  max-width: 260px;
+  width: 260px;
   height: 40px;
   margin-bottom: 10px;
   text-align: center;
   padding: 4px 12px 4px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s;
+
+  &:hover {
+    background: #f1f1f1;
+  }
 
   .imageGroup {
     display: flex;
     align-items: center;
+
     img {
       display: block;
       width: 32px;
       height: 32px;
       border-radius: 8px;
       margin-right: 8px;
+      object-fit: contain;
     } 
   }
 

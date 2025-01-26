@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+}
+
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: rgb(37,39,55);
+    background: linear-gradient(180deg, #b5b5b6 50%, rgba(247,248,249,1) 100%);
+}
+
+.popup {
+    height: 80vh;
+    width: 90vw;
+    margin: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+
+    @media (min-width: 480px) {
+        height: 70vh;
+        width: 80vw;
+    }
+}
+
+.popupHeader {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px 16px;
+    height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);    
+}
+
+.orderRange {
+    color: #3E5EF2;
+}
+
+.popupMain {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    padding: 36px 60px 60px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: center;
+    justify-items: center;
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    break-inside: avoid;
+    max-height: 100%;
+}

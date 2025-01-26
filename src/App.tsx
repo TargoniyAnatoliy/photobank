@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { fetchPhotos } from './api';
 
-import './App.css';
+import styles from './App.module.scss';
 import { Photo } from './types/Photo';
-import { Popup } from './components/Popup';
 import { useFavorites } from './FavoritesContext';
+import { groupPhotosByLetter } from './utils';
+import { PhotoCard } from './components/PhotoCard';
 
 export const App = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [defaultOrder, setDefaultOrder] = useState(true);
 
   const { favorites } = useFavorites();
 
@@ -31,14 +33,47 @@ export const App = () => {
     ? photos.filter((photo) => favorites.includes(photo.id))
     : photos;
 
+  const groupedPhotos = groupPhotosByLetter(filteredPhotos);
+
   return (
-    <div className='App'>
+    <div className={styles.App}>
       {isLoading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button onClick={() => setShowFavorites(!showFavorites)}>
-        {showFavorites ? 'Show All' : 'Show Favorites'}
-      </button>
-        <Popup photos={filteredPhotos} />
+      {error && <p style={{ color: 'red' }}>{error}</p>}      
+      <section className={styles.popup}>
+        <header className={styles.popupHeader}>
+          <p>
+            <span              
+              onClick={() => setDefaultOrder(!defaultOrder)}
+            >
+              Filter By: <a className={styles.defaultOrder} href='#'>{defaultOrder ? 'A-Z' : 'Z-A'}</a>
+            </span> | <span style={{ cursor: 'pointer' }} onClick={() => setShowFavorites(!showFavorites)}>
+              {showFavorites ? 'Show All' : 'Show Favorites'}
+            </span>
+          </p>
+        </header>
+        <main className={styles.popupMain}>
+          {groupedPhotos.map(([letter, photos]) => (
+            <div key={letter} className={styles.group}>
+              <h3 className={styles.groupHeader}>{letter}</h3>
+              {photos.length > 5 ? (
+                  photos.slice(0,5).map(photo => (
+                      <PhotoCard
+                          key={photo.id}
+                          photo={photo}
+                      />
+                  ))
+              ) : (
+                  photos.map(photo => (
+                      <PhotoCard
+                          key={photo.id}
+                          photo={photo}
+                      />
+                  ))
+              )}
+            </div>
+          ))}
+        </main>
+        </section>
     </div>
   );
 }
