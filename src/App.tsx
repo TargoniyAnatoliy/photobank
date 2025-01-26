@@ -3,9 +3,11 @@ import { fetchPhotos } from './api';
 
 import styles from './App.module.scss';
 import { Photo } from './types/Photo';
-import { useFavorites } from './FavoritesContext';
 import { groupPhotosByLetter } from './utils';
 import { PhotoCard } from './components/PhotoCard';
+import { IoIosArrowForward, IoIosClose } from 'react-icons/io';
+import classNames from 'classnames';
+import useFavorites from './FavoritesContext/useFavorites';
 
 export const App = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -13,6 +15,7 @@ export const App = () => {
   const [error, setError] = useState<string | null>(null);
   const [showFavorites, setShowFavorites] = useState(false);
   const [defaultOrder, setDefaultOrder] = useState(true);
+  const [popupOpen, setPopupOpen] = useState(true);
 
   const { favorites } = useFavorites();
 
@@ -35,11 +38,24 @@ export const App = () => {
 
   const groupedPhotos = groupPhotosByLetter(filteredPhotos);
 
+  if (defaultOrder) {
+    groupedPhotos.sort();
+  }
+
+  if (!defaultOrder) {
+    groupedPhotos.reverse();
+  }
+
+  const togglePopupOpen = () => setPopupOpen(!popupOpen);
+
   return (
     <div className={styles.App}>
-      {isLoading && <p>Loading...</p>}
+      <header className={styles.appHeader}>Photobank</header>
+      {isLoading && <p style={{ color: '#fff' }}>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}      
-      <section className={styles.popup}>
+      <section className={classNames(styles.popup, {
+        [styles.popupMini]: !popupOpen,
+      })}>
         <header className={styles.popupHeader}>
           <p>
             <span              
@@ -50,6 +66,12 @@ export const App = () => {
               {showFavorites ? 'Show All' : 'Show Favorites'}
             </span>
           </p>
+          <span
+            className={styles.headerIcon}
+            onClick={() => togglePopupOpen()}
+          >
+          {!popupOpen ? <IoIosArrowForward /> : <IoIosClose />}
+          </span>
         </header>
         <main className={styles.popupMain}>
           {groupedPhotos.map(([letter, photos]) => (

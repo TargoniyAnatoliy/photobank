@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 interface FavoritesContextProps {
     favorites: string[];
@@ -31,10 +31,4 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     );
 };
 
-export const useFavorites = () => {
-    const context = useContext(FavoritesContext);
-    if (!context) {
-        throw new Error('useFavorites must be used within a FavoritesProvider');
-    }
-    return context;
-};
+export default FavoritesContext;

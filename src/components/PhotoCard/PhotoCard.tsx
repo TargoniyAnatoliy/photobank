@@ -1,8 +1,8 @@
 import classNames from "classnames";
-import { useFavorites } from "../../FavoritesContext";
 import { Photo } from "../../types/Photo";
 import styles from './PhotoCard.module.scss';
 import { FaStar } from "react-icons/fa";
+import useFavorites from "../../FavoritesContext/useFavorites";
 
 interface Props {
     photo: Photo;
